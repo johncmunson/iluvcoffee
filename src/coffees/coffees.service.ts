@@ -1,5 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { Coffee } from './entities/coffee.entity';
+import { UpdateCoffeeDto } from './dto/update-coffee.dto';
+import { CreateCoffeeDto } from './dto/create-coffee.dto';
 
 @Injectable()
 export class CoffeesService {
@@ -16,27 +18,31 @@ export class CoffeesService {
     return this.coffees;
   }
 
-  findOne(id: string): Coffee {
-    const coffee = this.coffees.find(item => item.id === +id);
+  findOne(id: number): Coffee {
+    const coffee = this.coffees.find(item => item.id === id);
     if (!coffee) {
       throw new NotFoundException(`Coffee #${id} not found`);
     }
     return coffee;
   }
 
-  create(createCoffeeDto: any): void {
-    this.coffees.push(createCoffeeDto);
+  create(createCoffeeDto: CreateCoffeeDto): void {
+    this.coffees.push({
+      id: Math.floor(Math.random() * Math.floor(1000)),
+      ...createCoffeeDto,
+    });
   }
 
-  update(id: string, updateCoffeeDto: any): void {
+  update(id: number, updateCoffeeDto: UpdateCoffeeDto): void {
     const existingCoffee = this.findOne(id);
     if (existingCoffee) {
-      // update the existing entity
+      const index = this.coffees.findIndex(item => item.id === id);
+      this.coffees[index] = { ...existingCoffee, ...updateCoffeeDto };
     }
   }
 
-  remove(id: string): void {
-    const coffeeIndex = this.coffees.findIndex(item => item.id === +id);
+  remove(id: number): void {
+    const coffeeIndex = this.coffees.findIndex(item => item.id === id);
     if (coffeeIndex >= 0) {
       this.coffees.splice(coffeeIndex, 1);
     }
