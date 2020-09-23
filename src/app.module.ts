@@ -8,7 +8,7 @@ import { CoffeesModule } from './coffees/coffees.module';
   imports: [CoffeesModule, TypeOrmModule.forRoot({
     type: 'postgres',
     host: 'localhost',
-    port: 5433,
+    port: 5444,
     username: 'postgres',
     password: 'postgres',
     database: 'postgres',
