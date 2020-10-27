@@ -9,18 +9,18 @@ import { Repository } from 'typeorm';
 export class CoffeesService {
   constructor(
     @InjectRepository(Coffee)
-    private readonly coffeeRepository: Repository<Coffee>
+    private readonly coffeeRepository: Repository<Coffee>,
   ) {}
 
   findAll() {
     return this.coffeeRepository.find({
-      relations: ['flavors']
+      relations: ['flavors'],
     });
   }
 
   async findOne(id: number) {
     const coffee = await this.coffeeRepository.findOne(id, {
-      relations: ['flavors']
+      relations: ['flavors'],
     });
     if (!coffee) {
       throw new NotFoundException(`Coffee #${id} not found`);
@@ -29,14 +29,14 @@ export class CoffeesService {
   }
 
   create(createCoffeeDto: CreateCoffeeDto) {
-    const coffee = this.coffeeRepository.create(createCoffeeDto)
+    const coffee = this.coffeeRepository.create(createCoffeeDto);
     return this.coffeeRepository.save(coffee);
   }
 
   async update(id: number, updateCoffeeDto: UpdateCoffeeDto) {
     const coffee = await this.coffeeRepository.preload({
       id: id,
-      ...updateCoffeeDto
+      ...updateCoffeeDto,
     });
     if (!coffee) {
       throw new NotFoundException(`Coffee #${id} not found`);
