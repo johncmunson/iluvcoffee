@@ -1,5 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { DatabaseModule } from '../database/database.module';
 import { getConnection } from 'typeorm';
 import { CoffeesController } from './coffees.controller';
 import { CoffeesService } from './coffees.service';
@@ -12,17 +13,7 @@ describe('CoffeesService', () => {
 
   beforeEach(async () => {
     module = await Test.createTestingModule({
-      imports: [
-        TypeOrmModule.forRoot({
-          type: 'sqlite',
-          database: ':memory:',
-          dropSchema: true,
-          autoLoadEntities: true,
-          synchronize: true,
-          keepConnectionAlive: true,
-        }),
-        TypeOrmModule.forFeature([Coffee, Flavor]),
-      ],
+      imports: [DatabaseModule, TypeOrmModule.forFeature([Coffee, Flavor])],
       controllers: [CoffeesController],
       providers: [CoffeesService],
     }).compile();

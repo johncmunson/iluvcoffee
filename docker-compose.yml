@@ -1,10 +1,18 @@
 version: "3"
 
 services:
-  db:
+  dev-db:
     image: postgres
     restart: always
     ports:
       - "5444:5432"
+    environment:
+      POSTGRES_PASSWORD: postgres
+  
+  prod-db:
+    image: postgres
+    restart: always
+    ports:
+      - "5555:5432"
     environment:
       POSTGRES_PASSWORD: postgres
