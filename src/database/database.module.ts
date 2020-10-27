@@ -27,8 +27,8 @@ const dbConfig: TypeOrmModuleOptions =
         autoLoadEntities: true,
         synchronize: true,
       }
-    // Default to 'prod'
-    : {
+    : // Default to 'prod'
+      {
         type: 'postgres',
         host: 'localhost',
         port: 5555,
@@ -36,14 +36,13 @@ const dbConfig: TypeOrmModuleOptions =
         password: 'postgres',
         database: 'postgres',
         autoLoadEntities: true,
-        synchronize: true,
       };
 
 const typeOrmRootModule = TypeOrmModule.forRoot(dbConfig);
 
 @Module({
   imports: [typeOrmRootModule],
-  // Mike exports his, but I don't think it's necessary
+  // Mike exports his, but it doesn't seem to be necessary
   // exports: [typeOrmRootModule],
 })
 export class DatabaseModule {}

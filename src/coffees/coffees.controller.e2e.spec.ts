@@ -25,7 +25,8 @@ describe('CoffeesController', () => {
 
   afterAll(async () => {
     await app.close();
-    // these two lines maybe not necessary?
+    // these two lines maybe not necessary since
+    // we're using an in-memory database for tests
     await getConnection().dropDatabase();
     await getConnection().close();
   });
@@ -34,13 +35,22 @@ describe('CoffeesController', () => {
     expect(app).toBeDefined();
   });
 
-  it('creates coffees', () => {
-    return request(app.getHttpServer())
-      .post('/coffees')
-      .send({ name: 'abc', brand: 'xyz', flavors: ['q', 'r', 's'] })
-      .expect(201)
-      .expect({
-        data: { name: 'abc', brand: 'xyz', flavors: ['q', 'r', 's'] },
-      });
-  });
+  describe('POST /coffees', () => {
+    it('creates coffees', () => {
+      return request(app.getHttpServer())
+        .post('/coffees')
+        .send({ name: 'abc', brand: 'xyz', flavors: ['q', 'r', 's'] })
+        .expect(201)
+        .expect({
+          id: 1,
+          name: 'abc',
+          brand: 'xyz',
+          flavors: [
+            { id: 1, name: 'q' },
+            { id: 2, name: 'r' },
+            { id: 3, name: 's' },
+          ],
+        });
+    });
+  })
 });
